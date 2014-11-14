@@ -123,13 +123,16 @@ private char *progname;		/* used throughout 		*/
 
 private void usage(void);
 private void help(void);
+
+#ifdef TEST
 int main(int, char *[]);
+#endif
 
 private int unwrap(struct magic_set *, const char *);
 private int process(struct magic_set *ms, const char *, int);
 private struct magic_set *load(const char *, int);
 
-
+#ifdef TEST
 /*
  * main - parse arguments and handle options
  */
@@ -342,7 +345,7 @@ main(int argc, char *argv[])
 		magic_close(magic);
 	return e;
 }
-
+#endif
 
 private struct magic_set *
 /*ARGSUSED*/
