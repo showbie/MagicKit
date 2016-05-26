@@ -53,7 +53,9 @@
 #if TARGET_OS_MAC && !(TARGET_OS_IPHONE)
         magicFile = [[[NSBundle bundleForClass:[self class]] pathForResource:@"magic" ofType:@"mgc"] fileSystemRepresentation];
 #else
-        magicFile = [[[NSBundle mainBundle] pathForResource:@"magic" ofType:@"mgc"] fileSystemRepresentation];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"MagicKitResources" ofType:@"bundle"];
+        NSBundle *bundle = [NSBundle bundleWithPath:path];
+        magicFile = [[bundle pathForResource:@"magic" ofType:@"mgc"] fileSystemRepresentation];
 #endif
         
         if (sharedCookie == NULL || magic_load(sharedCookie, magicFile) == -1) {
