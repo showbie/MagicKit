@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		3B649CA81CF6B26F006FD386 /* magic.mgc in Resources */ = {isa = PBXBuildFile; fileRef = 3DCAF01B162D9C520036D9BF /* magic.mgc */; };
+		3B649CB71CFA6E1A006FD386 /* GEMagicResult.h in Headers */ = {isa = PBXBuildFile; fileRef = DD610A1D1271094B003CF804 /* GEMagicResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DCAEFE6162D8BDE0036D9BF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DCAEFE5162D8BDE0036D9BF /* Foundation.framework */; };
 		3DCAF01C162D9C520036D9BF /* magic.mgc in Resources */ = {isa = PBXBuildFile; fileRef = 3DCAF01B162D9C520036D9BF /* magic.mgc */; };
 		5F4F51871551FFD300248063 /* GEMagicResult.m in Sources */ = {isa = PBXBuildFile; fileRef = DD610A1E1271094B003CF804 /* GEMagicResult.m */; };
@@ -30,7 +31,7 @@
 		DD610A201271094B003CF804 /* GEMagicResult.m in Sources */ = {isa = PBXBuildFile; fileRef = DD610A1E1271094B003CF804 /* GEMagicResult.m */; };
 		DD610A4512710B7B003CF804 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD610A4412710B7B003CF804 /* MobileCoreServices.framework */; };
 		DD610A6712710C90003CF804 /* MagicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DD610A6612710C90003CF804 /* MagicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DD610A6812710C90003CF804 /* MagicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DD610A6612710C90003CF804 /* MagicKit.h */; };
+		DD610A6812710C90003CF804 /* MagicKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DD610A6612710C90003CF804 /* MagicKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDC9299A126187080012DE28 /* apprentice.c in Sources */ = {isa = PBXBuildFile; fileRef = DDC92978126187080012DE28 /* apprentice.c */; };
 		DDC9299B126187080012DE28 /* apptype.c in Sources */ = {isa = PBXBuildFile; fileRef = DDC92979126187080012DE28 /* apptype.c */; };
 		DDC9299C126187080012DE28 /* ascmagic.c in Sources */ = {isa = PBXBuildFile; fileRef = DDC9297A126187080012DE28 /* ascmagic.c */; };
@@ -387,6 +388,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDC92B4B12618BEE0012DE28 /* GEMagicKit.h in Headers */,
+				3B649CB71CFA6E1A006FD386 /* GEMagicResult.h in Headers */,
 				DD610A6812710C90003CF804 /* MagicKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,7 +538,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "UNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target MagicKit-iOS ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target MagicKit-iOS -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\nxcodebuild -target MagicKitResoures ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}-iOS.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-iOS.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-iOS.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/usr/local/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n";
+			shellScript = "UNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target MagicKit-iOS ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target MagicKit-iOS -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 -arch x86_64 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}-iOS.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}-iOS.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}-iOS.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/usr/local/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -836,11 +838,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "HAVE_CONFIG_H=1";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "MagicKit-iOS";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -851,10 +854,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "HAVE_CONFIG_H=1";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "MagicKit-iOS";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -889,6 +893,7 @@
 				3B649CA11CF6B240006FD386 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3B649CA41CF6B248006FD386 /* Build configuration list for PBXAggregateTarget "MagicKitUniversal" */ = {
 			isa = XCConfigurationList;
@@ -897,6 +902,7 @@
 				3B649CA61CF6B248006FD386 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DCAEFEE162D8BDE0036D9BF /* Build configuration list for PBXNativeTarget "MagicKitTest" */ = {
 			isa = XCConfigurationList;
